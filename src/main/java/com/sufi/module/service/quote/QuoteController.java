@@ -1,10 +1,8 @@
 package com.sufi.module.service.quote;
 
-import com.sufi.module.service.availability.AvailabilityResponse;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @RestController
@@ -22,10 +20,9 @@ public class QuoteController {
             int hotCodigo = Integer.parseInt(parts[0]);
             LocalDate fechaEntrada = LocalDate.parse(parts[1]);
             LocalDate fechaSalida = LocalDate.parse(parts[2]);
-            Double precioPorDia = Double.parseDouble(parts[3]);
 
             long noches = ChronoUnit.DAYS.between(fechaEntrada, fechaSalida);
-            double precioTotal = noches * precioPorDia;
+            double precioTotal = noches * 100;
 
             return new QuoteResponse(
                     hotCodigo,
