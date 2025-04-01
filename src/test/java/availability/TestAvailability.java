@@ -39,7 +39,8 @@ class TestAvailability {
 
         AvailabilityResponse fakeResponse = new AvailabilityResponse(
                 createAlojamiento(),
-                150.0
+                150.0,
+                "keyOption"
         );
 
         when(processorClient.getDisponibilidad(request))

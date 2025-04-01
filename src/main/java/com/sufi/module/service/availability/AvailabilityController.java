@@ -48,4 +48,6 @@ public class AvailabilityController {
     public Mono<String> obtenerAlojamientos() {
         return processorClient.getAlojamientos();
     }
+
+
 }

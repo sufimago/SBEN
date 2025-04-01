@@ -13,8 +13,11 @@ public class AvailabilityResponse {
     @JsonProperty("precio_por_dia")
     private Double precioPorDia;
 
-    public AvailabilityResponse(Alojamiento alojamiento, Double precioPorDia) {
+    private String keyOption;
+
+    public AvailabilityResponse(Alojamiento alojamiento, Double precioPorDia, String keyOption) {
         this.alojamiento = alojamiento;
         this.precioPorDia = precioPorDia;
+        this.keyOption = keyOption;
     }
 }

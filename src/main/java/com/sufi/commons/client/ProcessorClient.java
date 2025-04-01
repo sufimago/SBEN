@@ -52,10 +52,13 @@ public class ProcessorClient implements IProcessorClient {
                                 .map(response -> {
                                     // Obtener el nuevo ID del mapa
                                     Integer newListingId = listingIdToHotCodeMap.get(id);
+                                    //keyoption
+                                    String keyOption = createKeyOptionForQuote(response.getAlojamiento(), request);
 
                                     return new AvailabilityResponse(
                                             updateAlojamientoListingId(response.getAlojamiento(), newListingId),
-                                            response.getPrecioPorDia()
+                                            response.getPrecioPorDia(),
+                                            keyOption
                                     );
                                 })
                                 .toList()))
@@ -86,5 +89,12 @@ public class ProcessorClient implements IProcessorClient {
             listingIdToHotCodeMap.put(listingId, getHotCodeForListingId(listingId));
         }
         return listingIdToHotCodeMap;
+    }
+
+    private String createKeyOptionForQuote(Alojamiento alojamiento, AvailabilityRequest request) {
+        return String.format("%d|%s|%s",
+                alojamiento.getListing(),
+                request.getFechaEntrada().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                request.getFechaSalida().format(DateTimeFormatter.ISO_LOCAL_DATE));
     }
 }
