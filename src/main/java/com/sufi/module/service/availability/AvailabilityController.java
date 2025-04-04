@@ -24,10 +24,11 @@ public class AvailabilityController {
     public Mono<List<AvailabilityResponse>> obtenerDisponibilidad(
             @RequestParam String fechaEntrada,
             @RequestParam String fechaSalida,
-            @RequestParam List<Integer> listingIds
+            @RequestParam List<Integer> listingIds,
+            @RequestParam Integer occupancy
     ) {
         Instant startTime = Instant.now();
-        AvailabilityRequest request = construirDisponibilidadRequest(fechaEntrada, fechaSalida, listingIds);
+        AvailabilityRequest request = construirDisponibilidadRequest(fechaEntrada, fechaSalida, listingIds, occupancy);
         return processorClient.getDisponibilidad(request)
                 .doOnSubscribe(subscription -> System.out.println("Iniciando la petición..."))
                 .doOnSuccess(response -> {
@@ -36,12 +37,12 @@ public class AvailabilityController {
                 });
     }
 
-    public AvailabilityRequest construirDisponibilidadRequest(String fechaEntrada, String fechaSalida, List<Integer> listingIds) {
+    public AvailabilityRequest construirDisponibilidadRequest(String fechaEntrada, String fechaSalida, List<Integer> listingIds, Integer occupancy) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime startDate = LocalDate.parse(fechaEntrada, formatter).atStartOfDay();
         LocalDateTime endDate = LocalDate.parse(fechaSalida, formatter).atStartOfDay();
 
-        return new AvailabilityRequest(startDate, endDate, listingIds);
+        return new AvailabilityRequest(startDate, endDate, listingIds, occupancy);
     }
 
     @GetMapping("/obtenerAlojamientos")

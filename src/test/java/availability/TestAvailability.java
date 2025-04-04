@@ -34,13 +34,15 @@ class TestAvailability {
         AvailabilityRequest request = new AvailabilityRequest(
                 LocalDateTime.now(),
                 LocalDateTime.now().plusDays(1),
-                List.of(9000)
+                List.of(9000),
+                1
         );
 
         AvailabilityResponse fakeResponse = new AvailabilityResponse(
                 createAlojamiento(),
                 150.0,
-                "keyOption"
+                "keyOption",
+                List.of()
         );
 
         when(processorClient.getDisponibilidad(request))
@@ -63,7 +65,8 @@ class TestAvailability {
                 9000,
                 "Casa",
                 "Bogotá",
-                true
+                true,
+                2
         );
     }
 }

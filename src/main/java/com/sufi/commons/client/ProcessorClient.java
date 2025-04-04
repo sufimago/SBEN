@@ -4,11 +4,15 @@ import com.sufi.commons.IProcessorClient;
 import com.sufi.module.service.Alojamiento;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
+import com.sufi.module.service.quote.QuoteRequest;
+import com.sufi.module.service.quote.QuoteResponse;
+import com.sufi.module.util.KeyOptionUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -44,6 +48,7 @@ public class ProcessorClient implements IProcessorClient {
                                 .queryParam("fecha_entrada", request.getFechaEntrada().format(formatter))
                                 .queryParam("fecha_salida", request.getFechaSalida().format(formatter))
                                 .queryParam("listing_id", id)
+                                .queryParam("occupants", request.getOccupancy())
                                 .build())
                         .retrieve()
                         .bodyToFlux(AvailabilityResponse.class)
@@ -58,13 +63,36 @@ public class ProcessorClient implements IProcessorClient {
                                     return new AvailabilityResponse(
                                             updateAlojamientoListingId(response.getAlojamiento(), newListingId),
                                             response.getPrecioPorDia(),
-                                            keyOption
+                                            keyOption,
+                                            response.getPoliticas_cancelacion()
                                     );
                                 })
                                 .toList()))
                 .toList();
 
         return Flux.merge(responses).flatMap(Flux::fromIterable).collectList();
+    }
+
+    @Override
+    public Mono<QuoteResponse> quote(QuoteRequest request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        KeyOptionUtil.ParsedKeyOption parsed = KeyOptionUtil.parse(request.getKeyOption());
+
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/quote")
+                        .queryParam("fecha_entrada", parsed.fechaEntrada().format(formatter))
+                        .queryParam("fecha_salida", parsed.fechaSalida().format(formatter))
+                        .queryParam("listing_id", parsed.listingId())
+                        .queryParam("num_personas", parsed.occupancy())
+                        .build())
+                .retrieve()
+                .bodyToMono(QuoteResponse.class)
+                .map(resp -> new QuoteResponse(
+                        resp.getAlojamiento(),
+                        resp.getPrecioPorDia(),
+                        "EUR",
+                        resp.getPoliticas_cancelacion()));
     }
 
     private Integer getHotCodeForListingId(int listingId) {
@@ -79,7 +107,8 @@ public class ProcessorClient implements IProcessorClient {
                 hotCodigo,
                 alojamiento.getPais(),
                 alojamiento.getCiudad(),
-                alojamiento.isDisponible()
+                alojamiento.isDisponible(),
+                alojamiento.getOccupants()
         );
     }
 
@@ -92,9 +121,10 @@ public class ProcessorClient implements IProcessorClient {
     }
 
     private String createKeyOptionForQuote(Alojamiento alojamiento, AvailabilityRequest request) {
-        return String.format("%d|%s|%s",
+        return String.format("%d|%s|%s|%s",
                 alojamiento.getListing(),
                 request.getFechaEntrada().format(DateTimeFormatter.ISO_LOCAL_DATE),
-                request.getFechaSalida().format(DateTimeFormatter.ISO_LOCAL_DATE));
+                request.getFechaSalida().format(DateTimeFormatter.ISO_LOCAL_DATE),
+                request.getOccupancy());
     }
 }

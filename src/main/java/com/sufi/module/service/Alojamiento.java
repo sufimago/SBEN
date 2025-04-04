@@ -15,9 +15,10 @@ public class Alojamiento {
     private String nombre;
     private String pais;
     private boolean disponible;
+    private Integer occupants;
 
     // Constructor, getters y setters
-    public Alojamiento(String ciudad, String imagen_id, String direccion, int listing, String nombre, String pais, boolean disponible) {
+    public Alojamiento(String ciudad, String imagen_id, String direccion, int listing, String nombre, String pais, boolean disponible, Integer occupants) {
         this.ciudad = ciudad;
         this.imagen_id = imagen_id;
         this.direccion = direccion;
@@ -25,5 +26,6 @@ public class Alojamiento {
         this.nombre = nombre;
         this.pais = pais;
         this.disponible = disponible;
+        this.occupants = occupants;
     }
 }

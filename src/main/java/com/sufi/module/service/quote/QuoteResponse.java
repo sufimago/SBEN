@@ -1,21 +1,27 @@
 package com.sufi.module.service.quote;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sufi.module.service.Alojamiento;
+import com.sufi.module.service.DtoAvail;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
 public class QuoteResponse {
-    private int hotCodigo;
-    private String nombreHotel;
-    private double precioTotal;
-    private String moneda;
+    private Alojamiento alojamiento;
+
+    @JsonProperty("precio_por_dia")
+    private Double precioPorDia;
+    private List<DtoAvail> politicas_cancelacion;
 
     // Constructor
-    public QuoteResponse(int hotCodigo, String nombreHotel, double precioTotal, String moneda) {
-        this.hotCodigo = hotCodigo;
-        this.nombreHotel = nombreHotel;
-        this.precioTotal = precioTotal;
-        this.moneda = moneda;
+    public QuoteResponse(Alojamiento alojamiento, Double precioPorDia,String moneda, List<DtoAvail> politicas_cancelacion) {
+        this.alojamiento = alojamiento;
+        this.precioPorDia = precioPorDia;
+        this.politicas_cancelacion = politicas_cancelacion;
+        moneda = "EUR";
     }
 }

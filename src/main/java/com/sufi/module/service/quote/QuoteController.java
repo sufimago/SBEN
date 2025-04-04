@@ -1,35 +1,31 @@
 package com.sufi.module.service.quote;
 
+import com.sufi.commons.IProcessorClient;
+import com.sufi.module.service.DtoAvail;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+
+import java.time.Duration;
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/quote")
+@CrossOrigin(origins = "http://localhost:3000")
 public class QuoteController {
 
+    @Autowired
+    private IProcessorClient processorClient;
     @GetMapping("/get")
-    public Mono<QuoteResponse> getQuote(@RequestParam String keyOption) {
-        return Mono.fromCallable(() -> {
-            String[] parts = keyOption.split("\\|");
-            if (parts.length != 3) {
-                throw new IllegalArgumentException("Formato de keyOption inválido");
-            }
+    public Mono<QuoteResponse> obtenerQuote(@RequestParam String keyOption) {
+        Instant startTime = Instant.now();
+        QuoteRequest request = new QuoteRequest(keyOption);
 
-            int hotCodigo = Integer.parseInt(parts[0]);
-            LocalDate fechaEntrada = LocalDate.parse(parts[1]);
-            LocalDate fechaSalida = LocalDate.parse(parts[2]);
-
-            long noches = ChronoUnit.DAYS.between(fechaEntrada, fechaSalida);
-            double precioTotal = noches * 100;
-
-            return new QuoteResponse(
-                    hotCodigo,
-                    "Hotel " + hotCodigo,
-                    precioTotal,
-                    "EUR"
-            );
-        });
+        return processorClient.quote(request)
+                .doOnSubscribe(subscription -> System.out.println("Iniciando la petición de quote..."))
+                .doOnSuccess(response -> {
+                    Duration duration = Duration.between(startTime, Instant.now());
+                    System.out.println("Petición completada en: " + duration.toMillis() + " ms");
+                });
     }
 }

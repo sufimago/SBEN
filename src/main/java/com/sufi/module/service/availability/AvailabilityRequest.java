@@ -11,11 +11,13 @@ public class AvailabilityRequest {
     private LocalDateTime fechaEntrada;
     private LocalDateTime fechaSalida;
     private List<Integer> listingId;
+    private Integer occupancy;
 
     // Constructor, getters y setters
-    public AvailabilityRequest(LocalDateTime fechaEntrada, LocalDateTime fechaSalida, List<Integer> listingId) {
+    public AvailabilityRequest(LocalDateTime fechaEntrada, LocalDateTime fechaSalida, List<Integer> listingId, Integer occupancy) {
         this.fechaEntrada = fechaEntrada;
         this.fechaSalida = fechaSalida;
         this.listingId = listingId;
+        this.occupancy = occupancy;
     }
 }
