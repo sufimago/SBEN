@@ -1,7 +1,6 @@
 package com.sufi.module.service.quote;
 
 import com.sufi.commons.IProcessorClient;
-import com.sufi.module.service.DtoAvail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;

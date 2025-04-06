@@ -1,7 +1,7 @@
 package availability;
 
 import com.sufi.commons.IProcessorClient;
-import com.sufi.module.service.Alojamiento;
+import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
 import org.junit.jupiter.api.BeforeEach;

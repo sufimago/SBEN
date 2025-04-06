@@ -1,4 +1,4 @@
-package com.sufi.module.service;
+package com.sufi.module.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;

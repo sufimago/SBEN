@@ -1,9 +1,11 @@
 package com.sufi.commons.client;
 
 import com.sufi.commons.IProcessorClient;
-import com.sufi.module.service.Alojamiento;
+import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
+import com.sufi.module.service.confirm.ConfirmRequest;
+import com.sufi.module.service.confirm.ConfirmResponse;
 import com.sufi.module.service.quote.QuoteRequest;
 import com.sufi.module.service.quote.QuoteResponse;
 import com.sufi.module.util.KeyOptionUtil;
@@ -12,7 +14,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -93,6 +94,19 @@ public class ProcessorClient implements IProcessorClient {
                         resp.getPrecioPorDia(),
                         "EUR",
                         resp.getPoliticas_cancelacion()));
+    }
+
+    @Override
+    public Mono<ConfirmResponse> confirm(ConfirmRequest request) {
+        return webClient.post()
+                .uri("/confirm")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(ConfirmResponse.class)
+                .map(resp -> new ConfirmResponse(
+                        resp.getMensaje(),
+                        resp.getReserva()
+                ));
     }
 
     private Integer getHotCodeForListingId(int listingId) {
