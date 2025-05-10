@@ -1,11 +1,8 @@
 package com.sufi.module.util;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class KeyOptionUtil {
-    private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ISO_LOCAL_DATE;
-
     public static ParsedKeyOption parse(String keyOption) {
         String[] parts = keyOption.split("\\|");
         if (parts.length != 4) {

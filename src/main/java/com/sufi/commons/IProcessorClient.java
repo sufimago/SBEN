@@ -18,4 +18,10 @@ public interface IProcessorClient {
     Mono<QuoteResponse> quote(QuoteRequest request);
 
     Mono<ConfirmResponse> confirm(ConfirmRequest request);
+
+    Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudad(String ciudad, AvailabilityRequest request);
+
+    Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request);
+
+    Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudadCache(String ciudad, AvailabilityRequest request);
 }

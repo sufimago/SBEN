@@ -1,4 +1,4 @@
-package com.sufi.module.dto.Avail;
+package com.sufi.module.dto.avail;
 
 import lombok.Getter;
 import lombok.Setter;
