@@ -18,11 +18,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @Component
 public class ProcessorClient implements IProcessorClient {
@@ -31,8 +34,6 @@ public class ProcessorClient implements IProcessorClient {
 
     @Autowired
     private ProviderOptionsService providerOptionsService;
-
-    static String url = "jdbc:sqlite:C:\\Users\\soufyane.youbi\\Desktop\\TFG\\Back TFG\\SBEN\\baseDeDatoBack";
 
     public ProcessorClient(WebClient webClient) {
         this.webClient = webClient;
@@ -157,6 +158,12 @@ public class ProcessorClient implements IProcessorClient {
     private List<DataBaseDto> getAlojamientosPorCiudad(String ciudad) {
         List<DataBaseDto> alojamientos = new ArrayList<>();
         String query = "SELECT * FROM alojamientos WHERE ciudad = ?";
+        String url = getDatabaseUrl();
+
+        if (url == null) {
+            System.err.println("No se pudo obtener la URL de la base de datos");
+            return alojamientos;
+        }
 
         try (Connection conn = DriverManager.getConnection(url);
              PreparedStatement stmt = conn.prepareStatement(query)) {
@@ -231,6 +238,20 @@ public class ProcessorClient implements IProcessorClient {
         return listingId + "_" + startDate + "_" + duracion + "_" + request.getOccupancy();
     }
 
+    private String getDatabaseUrl() {
+        Properties props = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.out.println("No se encontró el archivo application.properties");
+                return null;
+            }
+            props.load(input);
+            return props.getProperty("database.sqlite.url");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
 }

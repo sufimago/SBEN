@@ -2,11 +2,30 @@ package com.sufi;
 
 import com.sufi.module.dto.DataBaseDto;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 public class HotelDatabase {
+    private static String getDatabaseUrl() {
+        Properties props = new Properties();
+        try (InputStream input = HotelDatabase.class.getClassLoader()
+                .getResourceAsStream("application.properties")) {
+            if (input == null) {
+                System.out.println("No se encontró application.properties");
+                return null;
+            }
+            props.load(input);
+            return props.getProperty("database.sqlite.url");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static List<DataBaseDto> getAlojamientos(Connection conn) {
         List<DataBaseDto> alojamientos = new ArrayList<>();
         String query = "SELECT * FROM alojamientos";
