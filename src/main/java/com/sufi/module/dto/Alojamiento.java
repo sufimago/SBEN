@@ -28,4 +28,8 @@ public class Alojamiento {
         this.disponible = disponible;
         this.occupants = occupants;
     }
+
+    public Alojamiento() {
+        // Constructor vacío
+    }
 }

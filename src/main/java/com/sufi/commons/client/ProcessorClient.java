@@ -193,37 +193,30 @@ public class ProcessorClient implements IProcessorClient {
 
     @Override
     public Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request) {
-        // Primero, mapeamos cada ListingId individualmente
-        List<Mono<List<AvailabilityResponse>>> responses = request.getListingId().stream()
-                .map(id -> {
-                    // Para cada `listingId`, generamos el `options` correspondiente
-                    String options = getRequestStr(request, id);  // Generamos el string para el listingId actual
+        return Flux.fromIterable(request.getListingId())
+                .flatMap(id -> {
+                    String options = getRequestStr(request, id);
+                    Alojamiento alojamiento = new Alojamiento();
+                    alojamiento.setListing(id);
 
-                    // Buscamos la disponibilidad para ese `listingId`
-                    return providerOptionsService.obtenerPorIdO(options)  // Aquí pasa el `options` correcto
-                            .collectList()  // Recogemos la lista de respuestas
+                    return providerOptionsService.obtenerPorIdO(options)
+                            .collectList()
                             .map(responsesList -> responsesList.stream()
                                     .map(response -> {
-                                        // Procesa el resultado
                                         String keyOption = createKeyOptionForQuote(id, request);
-
-                                        // Retorna la respuesta esperada
                                         return new AvailabilityResponse(
-                                                id,
+                                                alojamiento,
                                                 response.getP(),
-                                                keyOption
+                                                keyOption,
+                                                null,
+                                                null
                                         );
                                     })
                                     .toList());
                 })
-                .toList();
-
-        // Combinamos todas las respuestas en un solo Mono<List>
-        return Flux.merge(responses)  // Ejecutamos todas las búsquedas en paralelo
-                .flatMap(Flux::fromIterable)  // Aplanamos los resultados
-                .collectList();  // Recogemos todos los resultados en una lista
+                .flatMapIterable(list -> list)
+                .collectList();
     }
-
 
     private String getRequestStr(AvailabilityRequest request, int listingId) {
         // Tomamos la fecha de entrada y la salida
