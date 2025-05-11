@@ -2,9 +2,7 @@ package com.sufi.module.service.availability;
 
 import com.sufi.commons.IProcessorClient;
 import com.sufi.commons.service.ProviderOptionsService;
-import com.sufi.module.dto.ProviderOptions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,14 +21,11 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class AvailabilityController {
 
+    boolean isCache = true;
     @Autowired
     private IProcessorClient processorClient;
-
     @Autowired
     private ProviderOptionsService providerOptionsService;
-
-    boolean isCache = true;
-
     private boolean cache;
 
     @GetMapping("/obtenerDisponibilidadPorCiudad")

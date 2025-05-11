@@ -15,6 +15,7 @@ public class QuoteController {
 
     @Autowired
     private IProcessorClient processorClient;
+
     @GetMapping("/get")
     public Mono<QuoteResponse> obtenerQuote(@RequestParam String keyOption) {
         Instant startTime = Instant.now();

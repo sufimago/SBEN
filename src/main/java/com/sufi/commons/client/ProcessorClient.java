@@ -1,7 +1,6 @@
 package com.sufi.commons.client;
 
 import com.sufi.commons.IProcessorClient;
-import com.sufi.commons.mongo.ProviderOptionsRepository;
 import com.sufi.commons.service.ProviderOptionsService;
 import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.dto.DataBaseDto;

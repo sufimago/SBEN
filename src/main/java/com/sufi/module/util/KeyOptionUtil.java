@@ -22,5 +22,6 @@ public class KeyOptionUtil {
             LocalDateTime fechaEntrada,
             LocalDateTime fechaSalida,
             int occupancy
-    ) {}
+    ) {
+    }
 }
