@@ -42,7 +42,8 @@ class TestAvailability {
                 createAlojamiento(),
                 150.0,
                 "keyOption",
-                List.of()
+                List.of(),
+                null
         );
 
         when(processorClient.getDisponibilidad(request))

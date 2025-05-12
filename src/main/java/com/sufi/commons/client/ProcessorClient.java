@@ -19,6 +19,9 @@ import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -119,11 +122,12 @@ public class ProcessorClient implements IProcessorClient {
 
 
     private String createKeyOptionForQuote(int listingId, AvailabilityRequest request) {
-        return String.format("%d|%s|%s|%s",
+        String rawKey = String.format("%d|%s|%s|%s",
                 listingId,
                 request.getFechaEntrada().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 request.getFechaSalida().format(DateTimeFormatter.ISO_LOCAL_DATE),
                 request.getOccupancy());
+        return URLEncoder.encode(rawKey, StandardCharsets.UTF_8);
     }
 
     @Override
@@ -244,6 +248,4 @@ public class ProcessorClient implements IProcessorClient {
             return null;
         }
     }
-
-
 }
