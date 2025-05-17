@@ -2,6 +2,8 @@ package com.sufi.module.service.availability;
 
 import com.sufi.commons.IProcessorClient;
 import com.sufi.commons.service.ProviderOptionsService;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +26,9 @@ public class AvailabilityController {
     boolean isCache = true;
     @Autowired
     private IProcessorClient processorClient;
+
+    @Autowired
+    private MeterRegistry meterRegistry;
     @Autowired
     private ProviderOptionsService providerOptionsService;
     private boolean cache;
@@ -60,44 +65,38 @@ public class AvailabilityController {
         return processorClient.getAlojamientos();
     }
 
-//    @GetMapping("/provider-options")
-//    public List<ProviderOptions> obtenerProviderOptions(
-//            @RequestParam("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
-//            @RequestParam("duracion") int duracion,
-//            @RequestParam("ocupantes") int ocupantes) {
-//
-//        List<ProviderOptions> results = providerOptionsService.obtenerPorListingId(9000, fecha, duracion, ocupantes);
-//
-//        if (results.isEmpty()) {
-//            System.out.println("No se encontraron resultados.");
-//            return new ArrayList<>();
-//        } else {
-//            System.out.println("Se encontraron " + results.size() + " resultados.");
-//            return results;
-//        }
-//    }
-
-
-    @GetMapping("/disponibilidad")
+    @GetMapping("/obtenerDisponibilidad")
     public Mono<List<AvailabilityResponse>> obtenerDisponibilidad(
             @RequestParam String ciudad,
             @RequestParam String fechaEntrada,
             @RequestParam String fechaSalida,
-            @RequestParam Integer occupancy,
-            @RequestParam(defaultValue = "false") boolean useCache
+            @RequestParam Integer occupancy
     ) {
-        Instant startTime = Instant.now();
+        cache = true;
         AvailabilityRequest request = construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
+        Timer.Sample sample = Timer.start(meterRegistry);
 
-        Mono<List<AvailabilityResponse>> resultado = useCache
+        meterRegistry.counter("availability_cache_usage",
+                        "ciudad", ciudad,
+                        "cache", String.valueOf(cache))
+                .increment();
+
+        Mono<List<AvailabilityResponse>> resultado = cache
                 ? processorClient.obtenerDisponibilidadPorCiudadCache(ciudad, request)
                 : processorClient.obtenerDisponibilidadPorCiudad(ciudad, request);
 
         return resultado
-                .doOnSubscribe(subscription -> System.out.println("Iniciando la petición para ciudad: " + ciudad))
-                .doOnSuccess(response -> {
-                    Duration duration = Duration.between(startTime, Instant.now());
-                    System.out.println("Petición completada en: " + duration.toMillis() + " ms");
+                .doOnSuccess(response -> sample.stop(Timer.builder("availability_request_duration_seconds")
+                        .description("Duración de la solicitud de disponibilidad")
+                        .tag("ciudad", ciudad)
+                        .tag("cache", String.valueOf(cache))
+                        .register(meterRegistry)))
+                .doOnError(error -> {
+                    // Registrar errores
+                    meterRegistry.counter("availability_errors",
+                                    "ciudad", ciudad,
+                                    "error", error.getClass().getSimpleName())
+                            .increment();
                 });
     }
 }

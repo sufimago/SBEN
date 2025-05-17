@@ -26,6 +26,11 @@ dependencies {
     implementation 'org.xerial:sqlite-jdbc:3.41.2.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+    // Actuator para exponer endpoints de monitoreo
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // Micrometer Prometheus registry
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 
 }
 
