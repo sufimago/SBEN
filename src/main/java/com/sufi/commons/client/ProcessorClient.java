@@ -6,6 +6,8 @@ import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.dto.DataBaseDto;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
+import com.sufi.module.service.cancel.CancelRequest;
+import com.sufi.module.service.cancel.CancelResponse;
 import com.sufi.module.service.confirm.ConfirmRequest;
 import com.sufi.module.service.confirm.ConfirmResponse;
 import com.sufi.module.service.quote.QuoteRequest;
@@ -14,12 +16,12 @@ import com.sufi.module.util.KeyOptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
@@ -52,7 +54,6 @@ public class ProcessorClient implements IProcessorClient {
     @Override
     public Mono<List<AvailabilityResponse>> getDisponibilidad(AvailabilityRequest request) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
         List<Mono<List<AvailabilityResponse>>> responses = request.getListingId().stream()
                 .map(id -> webClient.get()
                         .uri(uriBuilder -> uriBuilder
@@ -75,12 +76,12 @@ public class ProcessorClient implements IProcessorClient {
                                             response.getPrecioPorDia(),
                                             keyOption,
                                             response.getPoliticas_cancelacion(),
-                                            response.getImagen()
+                                            response.getImagen(),
+                                            response.getPrecioTotal()
                                     );
                                 })
                                 .toList()))
                 .toList();
-
         return Flux.merge(responses).flatMap(Flux::fromIterable).collectList();
     }
 
@@ -201,6 +202,9 @@ public class ProcessorClient implements IProcessorClient {
                     String options = getRequestStr(request, id);
                     Alojamiento alojamiento = new Alojamiento();
                     alojamiento.setListing(id);
+                    alojamiento.setOccupants(request.getOccupancy());
+
+                    Integer duracion = getDuracion(request);
 
                     return providerOptionsService.obtenerPorIdO(options)
                             .collectList()
@@ -209,10 +213,11 @@ public class ProcessorClient implements IProcessorClient {
                                         String keyOption = createKeyOptionForQuote(id, request);
                                         return new AvailabilityResponse(
                                                 alojamiento,
-                                                response.getP(),
+                                                response.getP() / duracion,
                                                 keyOption,
                                                 null,
-                                                null
+                                                null,
+                                                response.getP()
                                         );
                                     })
                                     .toList());
@@ -233,6 +238,12 @@ public class ProcessorClient implements IProcessorClient {
         // Generamos el string en el formato: listingId_fechaEntrada_duracion_ocupantes
         return listingId + "_" + startDate + "_" + duracion + "_" + request.getOccupancy();
     }
+    private Integer getDuracion(AvailabilityRequest request) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate startDate = LocalDate.parse(request.getFechaEntrada().format(formatter), formatter);
+        LocalDate endDate = LocalDate.parse(request.getFechaSalida().format(formatter), formatter);
+        return (int) (endDate.toEpochDay() - startDate.toEpochDay());
+    }
 
     private String getDatabaseUrl() {
         Properties props = new Properties();
@@ -247,5 +258,17 @@ public class ProcessorClient implements IProcessorClient {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public Mono<CancelResponse> cancel(CancelRequest request) {
+        return webClient.post()
+                .uri("/cancel")
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(CancelResponse.class)
+                .map(resp -> new CancelResponse(
+                        resp.getMensaje()
+                ));
     }
 }

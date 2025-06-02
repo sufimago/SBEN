@@ -2,6 +2,8 @@ package com.sufi.commons;
 
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
+import com.sufi.module.service.cancel.CancelRequest;
+import com.sufi.module.service.cancel.CancelResponse;
 import com.sufi.module.service.confirm.ConfirmRequest;
 import com.sufi.module.service.confirm.ConfirmResponse;
 import com.sufi.module.service.quote.QuoteRequest;
@@ -24,4 +26,6 @@ public interface IProcessorClient {
     Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request);
 
     Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudadCache(String ciudad, AvailabilityRequest request);
+
+    Mono<CancelResponse> cancel(CancelRequest request);
 }

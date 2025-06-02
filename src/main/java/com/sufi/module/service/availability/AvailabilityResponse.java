@@ -15,26 +15,23 @@ import java.util.List;
 public class AvailabilityResponse {
     private Alojamiento alojamiento;
     private String imagen;
-    private int listingId;
 
     @JsonProperty("precio_por_dia")
     private Double precioPorDia;
+
+    @JsonProperty("precio_total")
+    private Double precioTotal;
 
     private String keyOption;
 
     private List<CancelPolicies> politicas_cancelacion;
 
-    public AvailabilityResponse(Alojamiento alojamiento, Double precioPorDia, String keyOption, List<CancelPolicies> cancelPolicies, String imagen) {
+    public AvailabilityResponse(Alojamiento alojamiento, Double precioPorDia, String keyOption, List<CancelPolicies> cancelPolicies, String imagen, Double precioTotal) {
         this.alojamiento = alojamiento;
         this.precioPorDia = precioPorDia;
         this.keyOption = keyOption;
         this.politicas_cancelacion = cancelPolicies;
         this.imagen = imagen;
-    }
-
-    public AvailabilityResponse(int listingId, Double precioPorDia, String keyOption) {
-        this.listingId = listingId;
-        this.precioPorDia = precioPorDia;
-        this.keyOption = keyOption;
+        this.precioTotal = precioTotal;
     }
 }

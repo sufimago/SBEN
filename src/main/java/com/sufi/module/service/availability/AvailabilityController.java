@@ -1,6 +1,7 @@
 package com.sufi.module.service.availability;
 
 import com.sufi.commons.IProcessorClient;
+import com.sufi.commons.service.AvailabilityService;
 import com.sufi.commons.service.ProviderOptionsService;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
@@ -31,6 +32,10 @@ public class AvailabilityController {
     private MeterRegistry meterRegistry;
     @Autowired
     private ProviderOptionsService providerOptionsService;
+
+    @Autowired
+    private AvailabilityService availabilityService;
+
     private boolean cache;
 
     @GetMapping("/obtenerDisponibilidadPorCiudad")
@@ -41,7 +46,7 @@ public class AvailabilityController {
             @RequestParam Integer occupancy
     ) {
         Instant startTime = Instant.now();
-        AvailabilityRequest request = construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
+        AvailabilityRequest request = availabilityService.construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
 
         return processorClient.obtenerDisponibilidadPorCiudad(ciudad, request)
                 .doOnSubscribe(subscription -> System.out.println("Iniciando la petición para ciudad: " + ciudad))
@@ -49,15 +54,6 @@ public class AvailabilityController {
                     Duration duration = Duration.between(startTime, Instant.now());
                     System.out.println("Petición completada en: " + duration.toMillis() + " ms");
                 });
-    }
-
-
-    public AvailabilityRequest construirDisponibilidadRequest(String fechaEntrada, String fechaSalida, Integer occupancy) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime startDate = LocalDate.parse(fechaEntrada, formatter).atStartOfDay();
-        LocalDateTime endDate = LocalDate.parse(fechaSalida, formatter).atStartOfDay();
-
-        return new AvailabilityRequest(startDate, endDate, new ArrayList<>(), occupancy);
     }
 
     @GetMapping("/obtenerAlojamientos")
@@ -73,7 +69,7 @@ public class AvailabilityController {
             @RequestParam Integer occupancy
     ) {
         cache = true;
-        AvailabilityRequest request = construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
+        AvailabilityRequest request = availabilityService.construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
         Timer.Sample sample = Timer.start(meterRegistry);
 
         meterRegistry.counter("availability_cache_usage",
@@ -92,11 +88,11 @@ public class AvailabilityController {
                         .tag("cache", String.valueOf(cache))
                         .register(meterRegistry)))
                 .doOnError(error -> {
-                    // Registrar errores
                     meterRegistry.counter("availability_errors",
                                     "ciudad", ciudad,
                                     "error", error.getClass().getSimpleName())
                             .increment();
+                    error.printStackTrace();
                 });
     }
 }

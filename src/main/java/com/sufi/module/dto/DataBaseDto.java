@@ -29,4 +29,8 @@ public class DataBaseDto {
         this.nombre = nombre;
         this.pais = pais;
     }
+
+    public DataBaseDto() {
+        // Constructor vacío
+    }
 }

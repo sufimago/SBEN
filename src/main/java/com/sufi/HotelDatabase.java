@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 public class HotelDatabase {
-    private static String getDatabaseUrl() {
+    public static String getDatabaseUrl() {
         Properties props = new Properties();
         try (InputStream input = HotelDatabase.class.getClassLoader()
                 .getResourceAsStream("application.properties")) {
