@@ -66,9 +66,10 @@ public class AvailabilityController {
             @RequestParam String ciudad,
             @RequestParam String fechaEntrada,
             @RequestParam String fechaSalida,
-            @RequestParam Integer occupancy
+            @RequestParam Integer occupancy,
+            @RequestParam boolean cache
     ) {
-        cache = true;
+        //cache = true;
         AvailabilityRequest request = availabilityService.construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
         Timer.Sample sample = Timer.start(meterRegistry);
 
