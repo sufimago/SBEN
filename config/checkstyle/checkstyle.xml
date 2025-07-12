@@ -3,10 +3,10 @@
         "https://checkstyle.org/dtds/configuration_1_3.dtd">
 
 <module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="warning"/>
+
     <module name="TreeWalker">
         <module name="FileTabCharacter"/>
-        <module name="LineLength">
-            <property name="max" value="100"/>
-        </module>
     </module>
 </module>

@@ -57,10 +57,12 @@ test {
 }
 
 checkstyle {
-    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
     toolVersion = '10.12.1'
-    showViolations = true
+    configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
     ignoreFailures = false
+    showViolations = true
+
+    exclude '**/generated/**'
 }
 
 spotbugs {
