@@ -8,5 +8,4 @@ import lombok.Setter;
 public class CancelPolicies {
     private Integer dias_antes;
     private Double penalizacion;
-
 }

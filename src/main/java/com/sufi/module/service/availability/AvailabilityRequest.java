@@ -21,4 +21,8 @@ public class AvailabilityRequest {
         this.listingId = listingId;
         this.occupancy = occupancy;
     }
+
+    public AvailabilityRequest() {
+        // Constructor vacío
+    }
 }

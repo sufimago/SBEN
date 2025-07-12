@@ -1,0 +1,78 @@
+Date : 2025-07-02 18:13:53
+Directory : c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main
+Total : 32 files,  1140 codes, 75 comments, 270 blanks, all 1485 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| Java     |         30 |      1,116 |         75 |        265 |      1,456 |
+| YAML     |          2 |         24 |          0 |          5 |         29 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                                             | files      | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                                |         32 |      1,140 |         75 |        270 |      1,485 |
+| java                                                                                                                             |         30 |      1,116 |         75 |        265 |      1,456 |
+| java\com                                                                                                                         |         30 |      1,116 |         75 |        265 |      1,456 |
+| java\com\sufi                                                                                                                    |         30 |      1,116 |         75 |        265 |      1,456 |
+| java\com\sufi (Files)                                                                                                            |          2 |         89 |          1 |         16 |        106 |
+| java\com\sufi\commons                                                                                                            |          6 |        354 |          5 |         72 |        431 |
+| java\com\sufi\commons (Files)                                                                                                    |          1 |         21 |          0 |         11 |         32 |
+| java\com\sufi\commons\client                                                                                                     |          1 |        236 |          4 |         34 |        274 |
+| java\com\sufi\commons\mongo                                                                                                      |          1 |          9 |          0 |          3 |         12 |
+| java\com\sufi\commons\service                                                                                                    |          3 |         88 |          1 |         24 |        113 |
+| java\com\sufi\module                                                                                                             |         22 |        673 |         69 |        177 |        919 |
+| java\com\sufi\module\dto                                                                                                         |          7 |        137 |          5 |         31 |        173 |
+| java\com\sufi\module\dto (Files)                                                                                                 |          6 |        126 |          5 |         27 |        158 |
+| java\com\sufi\module\dto\avail                                                                                                   |          1 |         11 |          0 |          4 |         15 |
+| java\com\sufi\module\service                                                                                                     |         14 |        514 |         64 |        140 |        718 |
+| java\com\sufi\module\service\availability                                                                                        |          3 |        132 |          3 |         28 |        163 |
+| java\com\sufi\module\service\cancel                                                                                              |          3 |         52 |          0 |         15 |         67 |
+| java\com\sufi\module\service\common                                                                                              |          2 |        176 |         60 |         62 |        298 |
+| java\com\sufi\module\service\confirm                                                                                             |          3 |         83 |          0 |         16 |         99 |
+| java\com\sufi\module\service\quote                                                                                               |          3 |         71 |          1 |         19 |         91 |
+| java\com\sufi\module\util                                                                                                        |          1 |         22 |          0 |          6 |         28 |
+| resources                                                                                                                        |          2 |         24 |          0 |          5 |         29 |
++----------------------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++----------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                                                                         | language | code       | comment    | blank      | total      |
++----------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\HotelDatabase.java                                      | Java     |         75 |          1 |         14 |         90 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\Main.java                                               | Java     |         14 |          0 |          2 |         16 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\IProcessorClient.java                           | Java     |         21 |          0 |         11 |         32 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\client\ProcessorClient.java                     | Java     |        236 |          4 |         34 |        274 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\mongo\ProviderOptionsRepository.java            | Java     |          9 |          0 |          3 |         12 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\AvailabilityService.java                | Java     |         16 |          0 |          5 |         21 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\ProviderOptionsService.java             | Java     |         14 |          1 |          5 |         20 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\ReservaService.java                     | Java     |         58 |          0 |         14 |         72 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Alojamiento.java                             | Java     |         29 |          2 |          4 |         35 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\CancelPolicies.java                          | Java     |          9 |          0 |          4 |         13 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Cliente.java                                 | Java     |         11 |          0 |          4 |         15 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\DataBaseDto.java                             | Java     |         30 |          2 |          5 |         37 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\ProviderOptions.java                         | Java     |         18 |          1 |          5 |         24 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Reserva.java                                 | Java     |         29 |          0 |          5 |         34 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\avail\DatabaseAvailMapping.java              | Java     |         11 |          0 |          4 |         15 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityController.java | Java     |         84 |          2 |         16 |        102 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityRequest.java    | Java     |         19 |          1 |          4 |         24 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityResponse.java   | Java     |         29 |          0 |          8 |         37 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelController.java             | Java     |         30 |          0 |          6 |         36 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelRequest.java                | Java     |         11 |          0 |          4 |         15 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelResponse.java               | Java     |         11 |          0 |          5 |         16 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\common\SbenDataDto.java                  | Java     |         52 |          0 |         25 |         77 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\common\SbenDto.java                      | Java     |        124 |         60 |         37 |        221 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmController.java           | Java     |         45 |          0 |          7 |         52 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmRequest.java              | Java     |         24 |          0 |          5 |         29 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmResponse.java             | Java     |         14 |          0 |          4 |         18 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteController.java               | Java     |         25 |          0 |          6 |         31 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteRequest.java                  | Java     |         23 |          0 |          8 |         31 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteResponse.java                 | Java     |         23 |          1 |          5 |         29 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\util\KeyOptionUtil.java                          | Java     |         22 |          0 |          6 |         28 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\resources\application.yml                                             | YAML     |         17 |          0 |          3 |         20 |
+| c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\resources\prometheus.yml                                              | YAML     |          7 |          0 |          2 |          9 |
+| Total                                                                                                                            |          |      1,140 |         75 |        270 |      1,485 |
++----------------------------------------------------------------------------------------------------------------------------------+----------+------------+------------+------------+------------+

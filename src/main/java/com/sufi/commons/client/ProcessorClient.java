@@ -3,6 +3,7 @@ package com.sufi.commons.client;
 import com.sufi.commons.IProcessorClient;
 import com.sufi.commons.service.ProviderOptionsService;
 import com.sufi.module.dto.Alojamiento;
+import com.sufi.module.dto.CancelPolicies;
 import com.sufi.module.dto.DataBaseDto;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
@@ -16,7 +17,6 @@ import com.sufi.module.util.KeyOptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -28,6 +28,7 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -121,7 +122,6 @@ public class ProcessorClient implements IProcessorClient {
                 ));
     }
 
-
     private String createKeyOptionForQuote(int listingId, AvailabilityRequest request) {
         String rawKey = String.format("%d|%s|%s|%s",
                 listingId,
@@ -141,7 +141,6 @@ public class ProcessorClient implements IProcessorClient {
         }
 
         request.setListingId(listingIds);
-
         return getDisponibilidad(request);
     }
 
@@ -155,7 +154,6 @@ public class ProcessorClient implements IProcessorClient {
         }
 
         request.setListingId(listingIds);
-
         return getDisponibilidadCache(request);
     }
 
@@ -215,7 +213,7 @@ public class ProcessorClient implements IProcessorClient {
                                                 alojamiento,
                                                 response.getP() / duracion,
                                                 keyOption,
-                                                null,
+                                                setCancelPolicies(),
                                                 null,
                                                 response.getP()
                                         );
@@ -271,4 +269,20 @@ public class ProcessorClient implements IProcessorClient {
                         resp.getMensaje()
                 ));
     }
+
+    private List<CancelPolicies> setCancelPolicies() {
+        return Arrays.asList(
+                createPolicy(1.0, 1),
+                createPolicy(0.5, 3),
+                createPolicy(0.25, 7)
+        );
+    }
+
+    private CancelPolicies createPolicy(double penalizacion, int diasAntes) {
+        CancelPolicies policy = new CancelPolicies();
+        policy.setPenalizacion(penalizacion);
+        policy.setDias_antes(diasAntes);
+        return policy;
+    }
+
 }

@@ -1,0 +1,34 @@
+"filename", "language", "Java", "YAML", "comment", "blank", "total"
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\HotelDatabase.java", "Java", 75, 0, 1, 14, 90
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\Main.java", "Java", 14, 0, 0, 2, 16
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\IProcessorClient.java", "Java", 21, 0, 0, 11, 32
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\client\ProcessorClient.java", "Java", 236, 0, 4, 34, 274
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\mongo\ProviderOptionsRepository.java", "Java", 9, 0, 0, 3, 12
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\AvailabilityService.java", "Java", 16, 0, 0, 5, 21
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\ProviderOptionsService.java", "Java", 14, 0, 1, 5, 20
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\commons\service\ReservaService.java", "Java", 58, 0, 0, 14, 72
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Alojamiento.java", "Java", 29, 0, 2, 4, 35
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\CancelPolicies.java", "Java", 9, 0, 0, 4, 13
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Cliente.java", "Java", 11, 0, 0, 4, 15
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\DataBaseDto.java", "Java", 30, 0, 2, 5, 37
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\ProviderOptions.java", "Java", 18, 0, 1, 5, 24
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\Reserva.java", "Java", 29, 0, 0, 5, 34
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\dto\avail\DatabaseAvailMapping.java", "Java", 11, 0, 0, 4, 15
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityController.java", "Java", 84, 0, 2, 16, 102
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityRequest.java", "Java", 19, 0, 1, 4, 24
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\availability\AvailabilityResponse.java", "Java", 29, 0, 0, 8, 37
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelController.java", "Java", 30, 0, 0, 6, 36
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelRequest.java", "Java", 11, 0, 0, 4, 15
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\cancel\CancelResponse.java", "Java", 11, 0, 0, 5, 16
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\common\SbenDataDto.java", "Java", 52, 0, 0, 25, 77
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\common\SbenDto.java", "Java", 124, 0, 60, 37, 221
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmController.java", "Java", 45, 0, 0, 7, 52
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmRequest.java", "Java", 24, 0, 0, 5, 29
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\confirm\ConfirmResponse.java", "Java", 14, 0, 0, 4, 18
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteController.java", "Java", 25, 0, 0, 6, 31
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteRequest.java", "Java", 23, 0, 0, 8, 31
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\service\quote\QuoteResponse.java", "Java", 23, 0, 1, 5, 29
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\java\com\sufi\module\util\KeyOptionUtil.java", "Java", 22, 0, 0, 6, 28
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\resources\application.yml", "YAML", 0, 17, 0, 3, 20
+"c:\Users\soufyane.youbi\Desktop\TFG\Back TFG\SBEN\src\main\resources\prometheus.yml", "YAML", 0, 7, 0, 2, 9
+"Total", "-", 1116, 24, 75, 270, 1485
