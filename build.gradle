@@ -7,7 +7,7 @@ plugins {
     id 'org.springframework.boot' version '3.1.5' // Actualizado a Spring Boot 3.1.5
     id 'io.spring.dependency-management' version '1.1.3' // Actualizado a 1.1.3
     id 'checkstyle'
-    id 'com.github.spotbugs' version '6.0.10'
+    id("com.github.spotbugs") version "5.0.14"
 }
 
 group = 'com.sufi'
@@ -63,17 +63,24 @@ checkstyle {
 }
 
 spotbugs {
-    toolVersion = '4.7.3'
-}
+    toolVersion = '4.7.3' // Versión compatible con plugin 5.0.14
+    ignoreFailures = false
 
-tasks.withType(SpotBugsTask).configureEach {
+    // Configuración alternativa que funciona seguro:
     effort = Effort.MAX
     reportLevel = Confidence.LOW
+}
+
+tasks.withType(SpotBugsTask) {
     reports {
-        xml.required = false
-        html.required = true
-        html.destination = file("$buildDir/reports/spotbugs/${name}.html")
+        html {
+            required = true
+            outputLocation = file("$buildDir/reports/spotbugs/${it.name}.html")
+        }
     }
+
+    // Excluir clases anónimas y generadas
+    excludeFilter = file('config/spotbugs/exclude.xml')
 }
 
 java {
