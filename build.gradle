@@ -57,9 +57,10 @@ test {
 }
 
 checkstyle {
-    configFile = file("config/checkstyle/checkstyle.xml")
-    toolVersion = "10.12.1"
+    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
+    toolVersion = '10.12.1'
     showViolations = true
+    ignoreFailures = false
 }
 
 spotbugs {
