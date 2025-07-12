@@ -79,7 +79,7 @@ tasks.withType(SpotBugsTask) {
     }
 
     // Excluir clases anónimas y generadas
-    excludeFilter = file('config/spotbugs/exclude.xml')
+    //excludeFilter = file('config/spotbugs/exclude.xml')
 }
 
 java {
