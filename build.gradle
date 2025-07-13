@@ -61,15 +61,15 @@ checkstyle {
     config = resources.text.fromArchiveEntry(configurations.checkstyle[0], 'google_checks.xml')
 }
 
-//spotbugs {
-//    toolVersion = '4.7.3' // Versión compatible con plugin 5.0.14
-//    ignoreFailures = false
-//
-//    effort = Effort.MAX
-//    reportLevel = Confidence.LOW
-//}
+spotbugs {
+    toolVersion = '4.7.3' // Versión compatible con plugin 5.0.14
+    ignoreFailures = false
 
-tasks.withType(SpotBugsTask) {
+    effort = Effort.MAX
+    reportLevel = Confidence.LOW
+}
+
+tasks.withType(SpotBugsTask).configureEach {
     reports {
         html {
             required = true
