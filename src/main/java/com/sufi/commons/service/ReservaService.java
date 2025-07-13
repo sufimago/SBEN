@@ -7,15 +7,17 @@ import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.logging.Logger;
 
 import static com.sufi.HotelDatabase.getDatabaseUrl;
 
 @Service
 public class ReservaService {
+    private static final java.util.logging.Logger logger = Logger.getLogger(ReservaService.class.getName());
     public String insertReserva(ConfirmRequest request, ConfirmResponse reserva) {
         String url = getDatabaseUrl();
         if (url == null) {
-            System.err.println("No se pudo obtener la URL de la base de datos");
+            logger.info("No se pudo obtener la URL de la base de datos");
             return "Error al obtener la URL de la base de datos";
         }
 
@@ -42,7 +44,7 @@ public class ReservaService {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0 ? "Reserva realizada con éxito" : "Error al realizar la reserva";
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe("Error al realizar la reserva: " + e.getMessage());
             return "Error al realizar la reserva: " + e.getMessage();
         }
     }
@@ -50,7 +52,7 @@ public class ReservaService {
     public String deleteReserva(CancelRequest request) {
         String url = getDatabaseUrl();
         if (url == null) {
-            System.err.println("No se pudo obtener la URL de la base de datos");
+            logger.info("No se pudo obtener la URL de la base de datos");
             return "Error al obtener la URL de la base de datos";
         }
 
@@ -64,7 +66,7 @@ public class ReservaService {
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0 ? "Reserva cancelada con éxito" : "No se encontró la reserva con el localizador proporcionado";
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.severe("Error al cancelar la reserva: " + e.getMessage());
             return "Error al cancelar la reserva: " + e.getMessage();
         }
     }
