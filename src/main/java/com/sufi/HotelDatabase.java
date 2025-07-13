@@ -8,20 +8,26 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class HotelDatabase {
+    private static final Logger logger = Logger.getLogger(HotelDatabase.class.getName());
+
+    private HotelDatabase() {
+        // Constructor privado para evitar instanciación
+    }
     public static String getDatabaseUrl() {
         Properties props = new Properties();
         try (InputStream input = HotelDatabase.class.getClassLoader()
                 .getResourceAsStream("application.properties")) {
             if (input == null) {
-                System.out.println("No se encontró application.properties");
+                logger.info("No se encontró application.properties");
                 return null;
             }
             props.load(input);
             return props.getProperty("database.sqlite.url");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.severe("Error al cargar application.properties: " + e.getMessage());
             return null;
         }
     }
@@ -50,7 +56,7 @@ public class HotelDatabase {
                 alojamientos.add(alojamiento);
             }
         } catch (SQLException e) {
-            System.out.println("Error al consultar los datos: " + e.getMessage());
+            logger.severe("Error al consultar los datos: " + e.getMessage());
         }
 
         return alojamientos;
@@ -80,7 +86,7 @@ public class HotelDatabase {
                 }
             }
         } catch (SQLException e) {
-            System.out.println("Error al consultar los datos: " + e.getMessage());
+            logger.severe("Error al consultar los datos por ciudad: " + e.getMessage());
         }
 
         return alojamientos;
