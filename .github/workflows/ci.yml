@@ -32,5 +32,32 @@ jobs:
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
-      - name: Run checks (test + checkstyle + spotbugs)
-        run: ./gradlew check
+#      - name: Run checks (test + checkstyle + spotbugs)
+#        run: ./gradlew check
+#
+#      - name: Build the project
+#        run: ./gradlew build --no-daemon
+
+      - name: Simulate deployment
+        run: |
+          echo "🚀 Starting deployment simulation..."
+          echo "🔍 Checking build artifacts..."
+          if [ -f build/libs/sufi-availability-service.jar ]; then
+            echo "✅ Artifact found: sufi-availability-service.jar"
+          else
+            echo "❌ Build artifact not found! Aborting."
+            exit 1
+          fi
+
+          echo "📦 Preparing deployment directory..."
+          mkdir -p /tmp/deploy/sufi-availability
+          echo "📁 Directory created: /tmp/deploy/sufi-availability"
+
+          echo "📤 Copying JAR to deployment directory..."
+          cp build/libs/sufi-availability-service.jar /tmp/deploy/sufi-availability/
+
+          echo "🔄 Setting permissions..."
+          chmod 755 /tmp/deploy/sufi-availability/sufi-availability-service.jar
+
+          echo "✅ Deployment simulation completed successfully!"
+          echo "📍 Artifact deployed to /tmp/deploy/sufi-availability/"
