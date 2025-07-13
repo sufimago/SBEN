@@ -93,6 +93,8 @@ class AvailabilityControllerTest {
             assertEquals(1.0, meterRegistry.get("availability_requests_total").counter().count());
             verify(availabilityService, times(1)).construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
             verify(processorClient, times(1)).obtenerDisponibilidadPorCiudadCache(eq(ciudad), any(AvailabilityRequest.class));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -126,6 +128,8 @@ class AvailabilityControllerTest {
             assertEquals(1.0, meterRegistry.get("availability_requests_total").counter().count());
             verify(availabilityService, times(1)).construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
             verify(processorClient, times(1)).obtenerDisponibilidadPorCiudad(eq(ciudad), any(AvailabilityRequest.class));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

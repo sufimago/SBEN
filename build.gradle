@@ -57,31 +57,25 @@ test {
 }
 
 checkstyle {
-    configFile = rootProject.file("config/checkstyle/checkstyle.xml")
     toolVersion = '10.12.1'
-    showViolations = true
-    ignoreFailures = false
+    config = resources.text.fromArchiveEntry(configurations.checkstyle[0], 'google_checks.xml')
 }
 
 spotbugs {
     toolVersion = '4.7.3' // Versión compatible con plugin 5.0.14
     ignoreFailures = false
 
-    // Configuración alternativa que funciona seguro:
     effort = Effort.MAX
     reportLevel = Confidence.LOW
 }
 
-tasks.withType(SpotBugsTask) {
+tasks.withType(SpotBugsTask).configureEach {
     reports {
         html {
             required = true
             outputLocation = file("$buildDir/reports/spotbugs/${it.name}.html")
         }
     }
-
-    // Excluir clases anónimas y generadas
-    excludeFilter = file('config/spotbugs/exclude.xml')
 }
 
 java {
