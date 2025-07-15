@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: booking-engine
+    env: java
+    plan: free
+    region: oregon
+    buildCommand: ./gradlew build
+    startCommand: java -jar build/libs/*.jar
+    javaVersion: 21
