@@ -32,11 +32,11 @@ jobs:
       - name: Grant execute permission to gradlew
         run: chmod +x ./gradlew
 
-#      - name: Run checks (test + checkstyle + spotbugs)
-#        run: ./gradlew check
-#
-#      - name: Build the project
-#        run: ./gradlew build --no-daemon
+      - name: Run checks (test + checkstyle + spotbugs)
+        run: ./gradlew check
+
+      - name: Build the project
+        run: ./gradlew build --no-daemon
 
       - name: Simulate deployment
         run: |
