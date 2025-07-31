@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface ProviderOptionsRepository extends ReactiveMongoRepository<ProviderOptions, String> {
+public interface IProviderOptionsRepository extends ReactiveMongoRepository<ProviderOptions, String> {
     Flux<ProviderOptions> findByIdO(String idO);
 }

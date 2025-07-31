@@ -5,6 +5,7 @@ import com.sufi.commons.service.ProviderOptionsService;
 import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.dto.CancelPolicies;
 import com.sufi.module.dto.DataBaseDto;
+import com.sufi.module.dto.ProviderOptions;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
 import com.sufi.module.service.cancel.CancelRequest;
@@ -27,10 +28,10 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 public class ProcessorClient implements IProcessorClient {
@@ -148,13 +149,13 @@ public class ProcessorClient implements IProcessorClient {
     public Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudadCache(String ciudad, AvailabilityRequest request) {
         List<DataBaseDto> alojamientos = getAlojamientosPorCiudad(ciudad);
 
-        List<Integer> listingIds = new ArrayList<>();
-        for (DataBaseDto alojamiento : alojamientos) {
-            listingIds.add(alojamiento.getListing());
-        }
+        List<Integer> listingIds = alojamientos.stream()
+                .map(DataBaseDto::getListing)
+                .toList();
 
         request.setListingId(listingIds);
-        return getDisponibilidadCache(request);
+
+        return getDisponibilidadCache(request, alojamientos);
     }
 
     private List<DataBaseDto> getAlojamientosPorCiudad(String ciudad) {
@@ -194,15 +195,16 @@ public class ProcessorClient implements IProcessorClient {
     }
 
     @Override
-    public Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request) {
+    public Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request, List<DataBaseDto> alojamientos) {
+        Integer duracion = getDuracion(request);
+        Map<Integer, DataBaseDto> alojamientoMap = alojamientos.stream()
+                .collect(Collectors.toMap(DataBaseDto::getListing, Function.identity()));
+
         return Flux.fromIterable(request.getListingId())
                 .flatMap(id -> {
                     String options = getRequestStr(request, id);
-                    Alojamiento alojamiento = new Alojamiento();
-                    alojamiento.setListing(id);
-                    alojamiento.setOccupants(request.getOccupancy());
-
-                    Integer duracion = getDuracion(request);
+                    DataBaseDto dto = alojamientoMap.get(id);
+                    Alojamiento alojamiento = getAlojamiento(request, dto);
 
                     return providerOptionsService.obtenerPorIdO(options)
                             .collectList()
@@ -222,6 +224,20 @@ public class ProcessorClient implements IProcessorClient {
                 })
                 .flatMapIterable(list -> list)
                 .collectList();
+    }
+
+    private static Alojamiento getAlojamiento(AvailabilityRequest request, DataBaseDto dto) {
+        Alojamiento alojamiento = new Alojamiento();
+        if (dto != null) {
+            alojamiento.setListing(dto.getListing());
+            alojamiento.setOccupants(request.getOccupancy());
+            alojamiento.setNombre(dto.getNombre());
+            alojamiento.setDireccion(dto.getDireccion());
+            alojamiento.setCiudad(dto.getCiudad());
+            alojamiento.setPais(dto.getPais());
+            alojamiento.setImagen_id(String.valueOf(dto.getImagenId()));
+        }
+        return alojamiento;
     }
 
     private String getRequestStr(AvailabilityRequest request, int listingId) {
@@ -284,5 +300,4 @@ public class ProcessorClient implements IProcessorClient {
         policy.setDias_antes(diasAntes);
         return policy;
     }
-
 }

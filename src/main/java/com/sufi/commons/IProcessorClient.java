@@ -1,5 +1,6 @@
 package com.sufi.commons;
 
+import com.sufi.module.dto.DataBaseDto;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
 import com.sufi.module.service.cancel.CancelRequest;
@@ -23,7 +24,7 @@ public interface IProcessorClient {
 
     Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudad(String ciudad, AvailabilityRequest request);
 
-    Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request);
+    Mono<List<AvailabilityResponse>> getDisponibilidadCache(AvailabilityRequest request, List<DataBaseDto> alojamientos);
 
     Mono<List<AvailabilityResponse>> obtenerDisponibilidadPorCiudadCache(String ciudad, AvailabilityRequest request);
 

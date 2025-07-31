@@ -56,9 +56,10 @@ public class AvailabilityController {
             @RequestParam String ciudad,
             @RequestParam String fechaEntrada,
             @RequestParam String fechaSalida,
-            @RequestParam Integer occupancy) {
+            @RequestParam Integer occupancy,
+            @RequestParam(required = false, defaultValue = "false") boolean useCache) {
 
-        return processRequest(ciudad, fechaEntrada, fechaSalida, occupancy, false);
+        return processRequest(ciudad, fechaEntrada, fechaSalida, occupancy, useCache);
     }
 
     @GetMapping("/obtenerAlojamientos")
