@@ -8,7 +8,7 @@ import lombok.Setter;
 public class DataBaseDto {
     private int hotCodigo;
     private String ciudad;
-    private Integer imagenId;
+    private String imagenId;
     private boolean disponible;
     private int occupants;
     private String direccion;
@@ -17,7 +17,7 @@ public class DataBaseDto {
     private String pais;
 
     // Constructor
-    public DataBaseDto(int hotCodigo, String ciudad, Integer imagenId, boolean disponible,
+    public DataBaseDto(int hotCodigo, String ciudad, String imagenId, boolean disponible,
                        int occupants, String direccion, int listing, String nombre, String pais) {
         this.hotCodigo = hotCodigo;
         this.ciudad = ciudad;

@@ -44,7 +44,7 @@ public class HotelDatabase {
                 DataBaseDto alojamiento = new DataBaseDto(
                         rs.getInt("hotCodigo"),
                         rs.getString("ciudad"),
-                        rs.getInt("imagen_id"),  // Puede ser null
+                        rs.getString("imagen_id"),  // Puede ser null
                         rs.getBoolean("disponible"),
                         rs.getInt("occupants"),
                         rs.getString("direccion"),
@@ -74,7 +74,7 @@ public class HotelDatabase {
                     DataBaseDto alojamiento = new DataBaseDto(
                             rs.getInt("hotCodigo"),
                             rs.getString("ciudad"),
-                            rs.getInt("imagen_id"),  // Puede ser null
+                            rs.getString("imagen_id"),  // Puede ser null
                             rs.getBoolean("disponible"),
                             rs.getInt("occupants"),
                             rs.getString("direccion"),

@@ -177,7 +177,7 @@ public class ProcessorClient implements IProcessorClient {
                     DataBaseDto alojamiento = new DataBaseDto(
                             rs.getInt("hotCodigo"),
                             rs.getString("ciudad"),
-                            rs.getInt("imagen_id"),
+                            rs.getString("imagen_id"),
                             rs.getBoolean("disponible"),
                             rs.getInt("occupants"),
                             rs.getString("direccion"),
@@ -235,7 +235,7 @@ public class ProcessorClient implements IProcessorClient {
             alojamiento.setDireccion(dto.getDireccion());
             alojamiento.setCiudad(dto.getCiudad());
             alojamiento.setPais(dto.getPais());
-            alojamiento.setImagen_id(String.valueOf(dto.getImagenId()));
+            alojamiento.setImagen_id(dto.getImagenId());
         }
         return alojamiento;
     }
