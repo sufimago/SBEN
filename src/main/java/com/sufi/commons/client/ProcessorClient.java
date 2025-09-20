@@ -5,7 +5,7 @@ import com.sufi.commons.service.ProviderOptionsService;
 import com.sufi.module.dto.Alojamiento;
 import com.sufi.module.dto.CancelPolicies;
 import com.sufi.module.dto.DataBaseDto;
-import com.sufi.module.dto.ProviderOptions;
+import com.sufi.module.dto.ProviderDataWebHook;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
 import com.sufi.module.service.cancel.CancelRequest;
@@ -16,6 +16,7 @@ import com.sufi.module.service.quote.QuoteRequest;
 import com.sufi.module.service.quote.QuoteResponse;
 import com.sufi.module.util.KeyOptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -29,7 +30,6 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,6 +41,9 @@ public class ProcessorClient implements IProcessorClient {
     @Autowired
     private ProviderOptionsService providerOptionsService;
 
+    @Value("${webhook.api.url}")
+    private String webhookUrl;
+
     public ProcessorClient(WebClient webClient) {
         this.webClient = webClient;
     }
@@ -51,6 +54,21 @@ public class ProcessorClient implements IProcessorClient {
                 .uri("/listings")
                 .retrieve()
                 .bodyToMono(String.class);
+    }
+
+    private static Alojamiento getAlojamiento(AvailabilityRequest request, DataBaseDto dto) {
+        Alojamiento alojamiento = new Alojamiento();
+        if (dto != null) {
+            alojamiento.setListing(dto.getListing());
+            alojamiento.setOccupants(request.getOccupancy());
+            alojamiento.setNombre(dto.getNombre());
+            alojamiento.setDireccion(dto.getDireccion());
+            alojamiento.setCiudad(dto.getCiudad());
+            alojamiento.setPais(dto.getPais());
+            alojamiento.setDisponible(dto.isDisponible());
+            alojamiento.setImagen_id(dto.getImagenId());
+        }
+        return alojamiento;
     }
 
     @Override
@@ -226,18 +244,12 @@ public class ProcessorClient implements IProcessorClient {
                 .collectList();
     }
 
-    private static Alojamiento getAlojamiento(AvailabilityRequest request, DataBaseDto dto) {
-        Alojamiento alojamiento = new Alojamiento();
-        if (dto != null) {
-            alojamiento.setListing(dto.getListing());
-            alojamiento.setOccupants(request.getOccupancy());
-            alojamiento.setNombre(dto.getNombre());
-            alojamiento.setDireccion(dto.getDireccion());
-            alojamiento.setCiudad(dto.getCiudad());
-            alojamiento.setPais(dto.getPais());
-            alojamiento.setImagen_id(dto.getImagenId());
-        }
-        return alojamiento;
+    public Mono<Void> enviarWebhook(ProviderDataWebHook payload) {
+        return webClient.post()
+                .uri(webhookUrl)
+                .bodyValue(payload)
+                .retrieve()
+                .bodyToMono(Void.class);
     }
 
     private String getRequestStr(AvailabilityRequest request, int listingId) {

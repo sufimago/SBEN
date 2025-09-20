@@ -1,6 +1,7 @@
 package com.sufi.commons;
 
 import com.sufi.module.dto.DataBaseDto;
+import com.sufi.module.dto.ProviderDataWebHook;
 import com.sufi.module.service.availability.AvailabilityRequest;
 import com.sufi.module.service.availability.AvailabilityResponse;
 import com.sufi.module.service.cancel.CancelRequest;
@@ -15,6 +16,8 @@ import java.util.List;
 
 public interface IProcessorClient {
     Mono<String> getAlojamientos();
+
+    Mono<Void> enviarWebhook(ProviderDataWebHook payload);
 
     Mono<List<AvailabilityResponse>> getDisponibilidad(AvailabilityRequest request);
 

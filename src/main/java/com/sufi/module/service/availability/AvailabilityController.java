@@ -3,6 +3,8 @@ package com.sufi.module.service.availability;
 import com.sufi.commons.IProcessorClient;
 import com.sufi.commons.service.AvailabilityService;
 import com.sufi.commons.service.ProviderOptionsService;
+import com.sufi.module.dto.ProviderDataPayloadWebHook;
+import com.sufi.module.dto.ProviderDataWebHook;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tags;
 import io.micrometer.core.instrument.Timer;
@@ -12,13 +14,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -88,6 +94,10 @@ public class AvailabilityController {
         Instant startTime = Instant.now();
         AvailabilityRequest request = availabilityService.construirDisponibilidadRequest(fechaEntrada, fechaSalida, occupancy);
 
+        if (request.getFechaEntrada().toLocalDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de entrada no puede ser en el pasado.");
+        }
+
         // Métricas de inicio
         requestsInProgress.incrementAndGet();
         meterRegistry.gauge("requests_in_progress", Tags.of("ciudad", ciudad, "cache", String.valueOf(useCache)),
@@ -100,9 +110,22 @@ public class AvailabilityController {
 
         Timer.Sample sample = Timer.start(meterRegistry);
 
-        Mono<List<AvailabilityResponse>> resultado = useCache
+        Mono<List<AvailabilityResponse>> resultado = (useCache
                 ? processorClient.obtenerDisponibilidadPorCiudadCache(ciudad, request)
-                : processorClient.obtenerDisponibilidadPorCiudad(ciudad, request);
+                .filter(responses -> responses != null && !responses.isEmpty())
+                .switchIfEmpty(
+                        // Cache vacía → llamamos a la API externa
+                        processorClient.obtenerDisponibilidadPorCiudad(ciudad, request)
+                                .flatMap(responses -> {
+                                    // Generamos los webhooks
+                                    List<ProviderDataWebHook> webhooks = buildProviderDataFromResponses(responses, request);
+
+                                    return Flux.fromIterable(webhooks)
+                                            .flatMap(payload -> processorClient.enviarWebhook(payload))
+                                            .then(Mono.just(responses));
+                                })
+                )
+                : processorClient.obtenerDisponibilidadPorCiudad(ciudad, request));
 
         return resultado
                 .doOnSuccess(response -> {
@@ -131,8 +154,11 @@ public class AvailabilityController {
 
                     logger.info(String.format("Petición completada en %d ms para %s (cache: %b)",
                             durationMs, ciudad, useCache));
+
+                    CsvLogger.log(Instant.now(), ciudad, useCache, durationMs, response.size(), true, null, 200);
                 })
                 .doOnError(error -> {
+                    long durationMs = Duration.between(startTime, Instant.now()).toMillis();
                     // Registro mejorado de errores
                     String errorType = error.getClass().getSimpleName();
                     String errorMessage = error.getMessage() != null ? error.getMessage() : "null";
@@ -162,6 +188,8 @@ public class AvailabilityController {
 
                     logger.severe(String.format("Error al obtener disponibilidad para %s (cache: %b): %s - Código: %d",
                             ciudad, useCache, errorMessage, statusCode));
+
+                    //CsvLogger.log(Instant.now(), ciudad, useCache, durationMs, 0, false, errorType, statusCode);
                 })
                 .doFinally(signalType -> {
                     // Actualización de métricas al finalizar
@@ -176,4 +204,28 @@ public class AvailabilityController {
                             .record(Duration.between(startTime, Instant.now()));
                 });
     }
+
+    private List<ProviderDataWebHook> buildProviderDataFromResponses(List<AvailabilityResponse> responses,
+                                                                     AvailabilityRequest request) {
+        if (responses == null || responses.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return responses.stream().map(resp -> {
+            ProviderDataPayloadWebHook payloadData = ProviderDataPayloadWebHook.builder()
+                    .fecha_entrada(String.valueOf(request.getFechaEntrada()))
+                    .fecha_salida(String.valueOf(request.getFechaSalida()))
+                    .listing_id(resp.getAlojamiento().getListing())
+                    .precio_base(resp.getPrecioPorDia())
+                    .build();
+
+            return ProviderDataWebHook.builder()
+                    .event_type("update_los")
+                    .listing_id(resp.getAlojamiento().getListing())
+                    .timestamp(Instant.now().toString())
+                    .data(payloadData)
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
 }

@@ -21,11 +21,11 @@ public class LoadTest {
             .build();
 
     // URL objetivo con parámetros
-    private static final String TARGET_URL = "http://localhost:8080/obtenerDisponibilidad?ciudad=Madrid&fechaEntrada=2025-10-01&fechaSalida=2025-10-10&occupancy=1&cache=true";
+    private static final String TARGET_URL = "http://localhost:8080/obtenerDisponibilidad?ciudad=Álava&fechaEntrada=2025-10-01&fechaSalida=2025-10-10&occupancy=1&cache=false";
 
     // Configuración del test
-    private static final int REQUESTS = 50;
-    private static final int THREADS = 50;
+    private static final int REQUESTS = 100;
+    private static final int THREADS = 500;
 
     // Contadores atómicos para estadísticas
     private static final AtomicInteger successCount = new AtomicInteger(0);
@@ -83,7 +83,7 @@ public class LoadTest {
         // Mostrar resultados finales
         System.out.println("\n=== Test Results ===");
         System.out.println("Total time: " + duration + " ms");
-        System.out.println("Requests per second: " + (REQUESTS / (duration / 50)));
+        System.out.println("Requests per second: " + (REQUESTS / (duration / 300)));
         System.out.println("Successful requests: " + successCount.get());
         System.out.println("Failed requests: " + errorCount.get());
         System.out.println("Success rate: " +
